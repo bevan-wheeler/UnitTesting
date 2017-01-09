@@ -68,9 +68,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="SetupExample.cs" />
-    <Compile Include="SampleExample.cs" />
     <Compile Include="DateValidation.cs" />
-    <Compile Include="ValidatorExample.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
