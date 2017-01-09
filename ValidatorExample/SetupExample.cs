@@ -9,7 +9,7 @@ using Excel = Microsoft.Office.Interop.Excel;
 using System.Runtime.InteropServices;
 using System.Reflection;
 
-namespace ValidatorExample
+namespace UnitTest
 {
     /// <summary>
     /// Summary description for SampleExample

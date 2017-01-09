@@ -11,7 +11,7 @@ using System.Runtime.InteropServices;
 using System.Reflection;
 
 
-namespace DateRangeValidator
+namespace UnitTest
 {
     /// <summary>
     /// Macro Testing ValidatorPriceListDates
