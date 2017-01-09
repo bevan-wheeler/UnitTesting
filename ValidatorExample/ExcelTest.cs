@@ -28,7 +28,7 @@ namespace UnitTest
             this.ExcelApp.DisplayAlerts = true;
 
             // Bevan - Test
-            this.Validator = GetVBAClass(this.ExcelApp, sClass);
+            this.Class = GetVBAClass(this.ExcelApp, sClass);
         }
 
         /// <summary>
@@ -38,17 +38,17 @@ namespace UnitTest
         public Excel.Application ExcelApp { get; set; } // Excel application link
 
         /// <summary>
-        /// Gets or sets the validator (if used)
+        /// Gets or sets the Class (if used)
         /// Need to test this - try to call validator functions
         /// </summary>
-        public object Validator { get; set; } // Excel application link
+        public object Class { get; set; } // Excel application link
 
         /// <inheritdoc/>
         public void Dispose()
         {
             // Clean Excel Up
             // Perform any object clean up here.
-            System.Runtime.InteropServices.Marshal.FinalReleaseComObject(this.Validator);
+            System.Runtime.InteropServices.Marshal.FinalReleaseComObject(this.Class);
             System.Runtime.InteropServices.Marshal.FinalReleaseComObject(this.ExcelApp);
 
             // If you are inheriting from another class that
