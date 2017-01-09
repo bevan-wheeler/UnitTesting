@@ -6,9 +6,17 @@
     /// SetupExample class
     /// </summary>
     [TestClass]
-    public class SetupExample
+    public class ValidatorDates
     {
         private static ExcelTest xlTest; // Testing object
+
+        private string sProcedureName;
+        private string sDate;
+        private string sDateStart;
+        private string sDateEnd;
+        private string sParentEnd;
+        private string sParentStart;
+
         private bool bResult;        // Result boolean
 
         /// <summary>
@@ -52,22 +60,42 @@
         }
 
         /// <summary>
-        /// TestModule1 sample
-        /// Runs a procedure (not a validator[class] procedure)
+        /// Start Date is larger than End Date
         /// </summary>
         [TestMethod]
-        public void TestModule1()
+        public void InnerDateLogic_A()
         {
-            // TODO: Add test logic here
-
             // Arrange
-            // sParam1 = "Test";
+            this.sProcedureName = "callInnerDatelogic";
+            this.sDateStart = "12/12/2100";
+            this.sDateEnd = "01/01/2000";
 
             // Act
-            // bResult = xlTest.ExcelApp._Run2("Procedure", sParam1);
+            object ret = validator.GetType().GetMethod(this.sProcedureName).Invoke(validator, new object[] { this.sDateStart, this.sDateEnd });
+
+            // bActual = xlApp.Run(sProcedureName, sDateStart, sDateEnd);
 
             // Assert
-            // Assert.IsFalse(bActual);
+            Assert.IsFalse(this.bResult);
+        }
+
+        /// <summary>
+        /// Date is smaller than Parent Start Date
+        /// </summary>
+        [TestMethod]
+        public void InnerParentDateLogic_A()
+        {
+            // Arrange
+            this.sProcedureName = "callInnerParentDateLogic";
+            this.sDate = "19001212";
+            this.sParentStart = "20000101";
+            this.sParentEnd = "21001212";
+
+            // Act
+            this.bResult = xlTest.ExcelApp.Run(this.sProcedureName, this.sDate, this.sParentStart, this.sParentEnd);
+
+            // Assert
+            Assert.IsFalse(this.bResult);
         }
     }
 }
