@@ -18,7 +18,7 @@ namespace UnitTest
         /// Initializes a new instance of the <see cref="ExcelTest"/> class
         /// </summary>
         /// <param name="sClass">Validator Class Name</param>
-        public ExcelTest(string sClass)
+        public ExcelTest(string sClass = null)
         {
             // Grabs the active Excel application here
             // This could be enhanced in the future to specify an Excel file
@@ -27,8 +27,10 @@ namespace UnitTest
             this.ExcelApp.Visible = true;
             this.ExcelApp.DisplayAlerts = true;
 
-            // Bevan - Test
-            this.Class = GetVBAClass(this.ExcelApp, sClass);
+            // Bevan - Initialise our class if a variable is passed in
+            if (!string.IsNullOrEmpty(sClass)) {
+                this.Class = GetVBAClass(this.ExcelApp, sClass);
+            }
         }
 
         /// <summary>
@@ -76,7 +78,9 @@ namespace UnitTest
 
             // Add a new module/function
             VBComponent compModule = xlProj.VBComponents.Add(vbext_ComponentType.vbext_ct_StdModule);
-            compModule.CodeModule.InsertLines(compModule.CodeModule.CountOfLines + 1, "Public Function " + sFunctionName + "() As " + sClassName + "\r\n Set " + sFunctionName + " = New " + sClassName + "\r\n End Function");
+            compModule.CodeModule.InsertLines(
+                compModule.CodeModule.CountOfLines + 1,
+                "Public Function " + sFunctionName + "() As " + sClassName + "\r\n Set " + sFunctionName + " = New " + sClassName + "\r\n End Function");
 
             // Run the function
             object val = xlApp._Run2(sFunctionName);
