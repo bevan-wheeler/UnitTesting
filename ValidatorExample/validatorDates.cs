@@ -27,7 +27,11 @@
         public static void MyClassInitialize(TestContext testContext)
         {
             // Generate our new testing object
-            xlTest = new ExcelTest("ValidatorPriceListDates");
+            xlTest = new ExcelTest();
+
+            // Create a new instance of our class
+            // This is only needed for class objects
+            xlTest.SetClass("ValidatorPriceListDates");
         }
 
         /// <summary>
@@ -71,9 +75,8 @@
             this.sDateEnd = "01/01/2000";
 
             // Act
-            object ret = validator.GetType().GetMethod(this.sProcedureName).Invoke(validator, new object[] { this.sDateStart, this.sDateEnd });
-
-            // bActual = xlApp.Run(sProcedureName, sDateStart, sDateEnd);
+            // object ret = validator.GetType().GetMethod(this.sProcedureName).Invoke(validator, new object[] { this.sDateStart, this.sDateEnd });
+            this.bResult = xlTest.ExcelApp.Run(this.sProcedureName, this.sDateStart, this.sDateEnd);
 
             // Assert
             Assert.IsFalse(this.bResult);
@@ -93,6 +96,8 @@
 
             // Act
             this.bResult = xlTest.ExcelApp.Run(this.sProcedureName, this.sDate, this.sParentStart, this.sParentEnd);
+
+            // object objResult = xlTest.RunClass(this.sProcedureName, new object[] { this.sDate, this.sParentStart, this.sParentEnd });
 
             // Assert
             Assert.IsFalse(this.bResult);

@@ -19,7 +19,11 @@
         public static void MyClassInitialize(TestContext testContext)
         {
             // Generate our new testing object
-            xlTest = new ExcelTest("ValidatorPriceListDates");
+            xlTest = new ExcelTest();
+
+            // Create a new instance of our class
+            // This is only needed for class objects
+            xlTest.SetClass("ValidatorPriceListDates");
         }
 
         /// <summary>

@@ -17,8 +17,7 @@ namespace UnitTest
         /// <summary>
         /// Initializes a new instance of the <see cref="ExcelTest"/> class
         /// </summary>
-        /// <param name="sClass">Validator Class Name</param>
-        public ExcelTest(string sClass = null)
+        public ExcelTest()
         {
             // Grabs the active Excel application here
             // This could be enhanced in the future to specify an Excel file
@@ -26,16 +25,10 @@ namespace UnitTest
             this.ExcelApp = (Excel.Application)Marshal.GetActiveObject("excel.application");
             this.ExcelApp.Visible = true;
             this.ExcelApp.DisplayAlerts = true;
-
-            // Bevan - Initialise our class if a variable is passed in
-            if (!string.IsNullOrEmpty(sClass)) {
-                this.Class = GetVBAClass(this.ExcelApp, sClass);
-            }
         }
 
         /// <summary>
-        /// Gets or sets the ExcelApp Object
-        /// Call the _run2 function to run a function
+        /// Gets or sets the ExcelApp Object.
         /// </summary>
         public Excel.Application ExcelApp { get; set; } // Excel application link
 
@@ -44,6 +37,15 @@ namespace UnitTest
         /// Need to test this - try to call validator functions
         /// </summary>
         public object Class { get; set; } // Excel application link
+
+        /// <summary>
+        /// Sets the class property with the VBA class object
+        /// </summary>
+        /// <param name="sClassName">VBA Class name</param>
+        public void SetClass(string sClassName)
+        {
+            this.Class = this.GetVBAClass(this.ExcelApp, sClassName);
+        }
 
         /// <inheritdoc/>
         public void Dispose()
@@ -61,16 +63,30 @@ namespace UnitTest
         }
 
         /// <summary>
+        /// Runs a class procedure
+        /// </summary>
+        /// <param name="sProcedure">Procedure in class to run</param>
+        /// <param name="oRunArgs">Params passed as: new object[] { this.sProcedureName, this.sDate, this.sParentStart, this.sParentEnd }</param>
+        /// <returns>An object? Result?</returns>
+        public object RunClass(string sProcedure, object[] oRunArgs)
+        {
+            return this.Class.GetType().InvokeMember(sProcedure, System.Reflection.BindingFlags.Default | System.Reflection.BindingFlags.InvokeMethod, null, this.Class, oRunArgs);
+        }
+
+        /// <summary>
         /// Bevan Test Add Component method
         /// We can't use reflection to call the classes by name
         /// </summary>
         /// <param name="xlApp">Excel application object</param>
         /// <param name="sClassName">Validator Class Name</param>
         /// <returns>The Validator Class Reference</returns>
-        private static object GetVBAClass(Excel.Application xlApp, string sClassName)
+        private object GetVBAClass(Excel.Application xlApp, string sClassName)
         {
             // Grab the Class component being passed in from name
-            VBProject xlProj = xlApp.ActiveWorkbook.VBProject;
+            // If this errors:
+            // Click the Trust Center tab, and then click Trust Center Settings.
+            // Click the Macro Settings tab, click to select the Trust access to the VBA project object model check box
+            VBProject xlProj = xlApp.VBE.ActiveVBProject;
             VBComponent compVal = xlProj.VBComponents.Item(sClassName);
 
             // Function name to run
